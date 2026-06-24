@@ -1,0 +1,281 @@
+<!-- waywardly/tour-detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Waters Resort - Waywardly</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --sand: #F5E6D3; --ocean: #1B6B93; --sunset: #E8835F; --forest: #2D6A4F; --gold: #D4A574; --dark: #1A1A2E; --cream: #FFF8F0; --text: #2C2C3A; --text-light: #6B6B7B; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 15px 0; background: rgba(255,248,240,0.95); backdrop-filter: blur(20px); box-shadow: 0 2px 30px rgba(0,0,0,0.08); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; text-decoration: none; color: var(--ocean); }
+        .nav-links { display: flex; list-style: none; gap: 35px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 15px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sunset); }
+        .btn-nav { padding: 12px 28px; background: var(--sunset); color: white !important; border-radius: 50px; font-weight: 600; }
+        .mobile-toggle { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+        .mobile-toggle span { width: 25px; height: 2px; background: var(--text); }
+
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 30px; }
+
+        /* Hero Gallery */
+        .tour-hero { padding-top: 80px; }
+        .tour-gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 250px 250px; gap: 10px; border-radius: 20px; overflow: hidden; }
+        .tour-gallery-item { overflow: hidden; cursor: pointer; }
+        .tour-gallery-item:first-child { grid-row: span 2; }
+        .tour-gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .tour-gallery-item:hover img { transform: scale(1.08); }
+
+        /* Tour Content */
+        .tour-content { padding: 50px 0 100px; }
+        .tour-layout { display: grid; grid-template-columns: 1fr 380px; gap: 50px; align-items: start; }
+        .tour-main {}
+        .tour-sidebar { position: sticky; top: 100px; }
+
+        .tour-main h1 {
+            font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 800;
+            margin-bottom: 15px; line-height: 1.2;
+        }
+        .tour-location-bar { display: flex; gap: 20px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .tour-loc { font-size: 15px; color: var(--ocean); font-weight: 600; }
+        .tour-rating-detail { font-size: 15px; }
+        .tour-rating-detail .stars { color: #FFC312; }
+        .tour-meta-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+        .meta-tag {
+            padding: 8px 18px; background: white; border: 1px solid #E0D5C7;
+            border-radius: 50px; font-size: 13px; font-weight: 500;
+        }
+
+        .tour-desc { margin-bottom: 40px; }
+        .tour-desc h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 15px; }
+        .tour-desc p { color: var(--text-light); font-size: 15px; line-height: 1.8; margin-bottom: 15px; }
+
+        .tour-highlights { margin-bottom: 40px; }
+        .tour-highlights h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 20px; }
+        .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .highlight-item {
+            display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+            background: white; border-radius: 12px; border: 1px solid #E0D5C7;
+        }
+        .highlight-item .icon { font-size: 20px; }
+        .highlight-item .text { font-size: 14px; font-weight: 500; }
+
+        .itinerary { margin-bottom: 40px; }
+        .itinerary h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 20px; }
+        .itinerary-day {
+            padding: 20px; background: white; border: 1px solid #E0D5C7;
+            border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .itinerary-day:hover { border-color: var(--ocean); }
+        .itinerary-day h4 { font-size: 16px; font-weight: 700; margin-bottom: 5px; color: var(--ocean); }
+        .itinerary-day p { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+        /* Sidebar Booking */
+        .booking-card {
+            background: white; border-radius: 20px; padding: 30px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.08); border: 1px solid #E0D5C7;
+        }
+        .booking-price { font-size: 36px; font-weight: 800; color: var(--ocean); margin-bottom: 5px; }
+        .booking-price span { font-size: 15px; font-weight: 400; color: var(--text-light); }
+        .booking-original { font-size: 16px; color: var(--text-light); text-decoration: line-through; margin-bottom: 20px; }
+        .booking-form label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; margin-top: 15px; }
+        .booking-form input, .booking-form select {
+            width: 100%; padding: 14px; border: 1px solid #E0D5C7; border-radius: 10px;
+            font-size: 14px; outline: none; background: var(--cream); transition: border 0.3s;
+        }
+        .booking-form input:focus, .booking-form select:focus { border-color: var(--ocean); }
+        .booking-total { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid #E0D5C7; }
+        .booking-total span:first-child { font-weight: 500; color: var(--text-light); }
+        .booking-total span:last-child { font-weight: 800; font-size: 20px; color: var(--ocean); }
+        .btn-book {
+            width: 100%; margin-top: 20px; padding: 16px; background: var(--sunset); color: white;
+            border: none; border-radius: 50px; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-book:hover { background: #D4714D; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,131,95,0.3); }
+        .booking-note { margin-top: 15px; font-size: 12px; color: var(--text-light); text-align: center; }
+
+        /* Reviews */
+        .tour-reviews { margin-bottom: 40px; }
+        .tour-reviews h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 20px; }
+        .review-item {
+            background: white; border: 1px solid #E0D5C7; border-radius: 14px;
+            padding: 25px; margin-bottom: 12px;
+        }
+        .review-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .review-author { font-weight: 700; }
+        .review-date { font-size: 13px; color: var(--text-light); }
+        .review-stars { color: #FFC312; font-size: 14px; margin-bottom: 8px; }
+        .review-body { font-size: 14px; color: var(--text-light); line-height: 1.7; }
+
+        footer { background: var(--dark); padding: 40px 0; text-align: center; }
+        footer p { color: rgba(255,255,255,0.4); font-size: 13px; }
+
+        @media (max-width: 1024px) {
+            .tour-layout { grid-template-columns: 1fr; }
+            .tour-sidebar { position: static; }
+            .tour-gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 250px 200px; }
+            .tour-gallery-item:first-child { grid-column: span 2; grid-row: span 1; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; } .mobile-toggle { display: flex; }
+            .tour-main h1 { font-size: 28px; }
+            .tour-gallery { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .tour-gallery-item:first-child { grid-column: span 1; }
+            .tour-gallery-item:nth-child(n+3) { display: none; }
+            .highlight-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Waywardly</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="destinations.html">Destinations</a></li>
+                <li><a href="#">Experiences</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#" class="btn-nav">Book Now</a></li>
+            </ul>
+            <div class="mobile-toggle"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <section class="tour-hero">
+        <div class="section-container">
+            <div class="tour-gallery">
+                <div class="tour-gallery-item"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop" alt=""></div>
+                <div class="tour-gallery-item"><img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=400&h=300&fit=crop" alt=""></div>
+                <div class="tour-gallery-item"><img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&h=300&fit=crop" alt=""></div>
+                <div class="tour-gallery-item"><img src="https://images.unsplash.com/photo-1540202404-a2f29016b523?w=400&h=300&fit=crop" alt=""></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tour-content">
+        <div class="section-container">
+            <div class="tour-layout">
+                <div class="tour-main">
+                    <h1>Crystal Waters Resort — Maldives</h1>
+                    <div class="tour-location-bar">
+                        <span class="tour-loc">📍 South Malé Atoll, Maldives</span>
+                        <span class="tour-rating-detail"><span class="stars">★★★★★</span> 4.9 (320 reviews)</span>
+                    </div>
+                    <div class="tour-meta-tags">
+                        <span class="meta-tag">🕐 5 Days / 4 Nights</span>
+                        <span class="meta-tag">🏨 5-Star Resort</span>
+                        <span class="meta-tag">✈️ All Inclusive</span>
+                        <span class="meta-tag">🌊 Beach & Water</span>
+                        <span class="meta-tag">💑 Couples</span>
+                    </div>
+
+                    <div class="tour-desc">
+                        <h2>About This Trip</h2>
+                        <p>Experience paradise on earth with our exclusive Crystal Waters Resort package. Stay in luxurious overwater villas with glass floors, enjoy world-class dining, and immerse yourself in the breathtaking beauty of the Maldives.</p>
+                        <p>From sunrise yoga sessions to sunset dolphin cruises, every moment is crafted for an unforgettable experience. Our expert local guides ensure you discover the hidden gems of the South Malé Atoll.</p>
+                    </div>
+
+                    <div class="tour-highlights">
+                        <h2>What's Included</h2>
+                        <div class="highlight-grid">
+                            <div class="highlight-item"><span class="icon">✈️</span><span class="text">Return flights from Karachi/Lahore/Islamabad</span></div>
+                            <div class="highlight-item"><span class="icon">🏨</span><span class="text">4 nights in Overwater Villa</span></div>
+                            <div class="highlight-item"><span class="icon">🍽️</span><span class="text">All meals + premium beverages</span></div>
+                            <div class="highlight-item"><span class="icon">🤿</span><span class="text">Snorkeling & diving excursion</span></div>
+                            <div class="highlight-item"><span class="icon">🚤</span><span class="text">Speedboat island hopping</span></div>
+                            <div class="highlight-item"><span class="icon">🌅</span><span class="text">Sunset dolphin cruise</span></div>
+                            <div class="highlight-item"><span class="icon">💆</span><span class="text">Couples spa treatment</span></div>
+                            <div class="highlight-item"><span class="icon">📸</span><span class="text">Professional photo session</span></div>
+                        </div>
+                    </div>
+
+                    <div class="itinerary">
+                        <h2>Day-by-Day Itinerary</h2>
+                        <div class="itinerary-day">
+                            <h4>Day 1 — Arrival & Welcome</h4>
+                            <p>Arrive in Malé, speedboat transfer to resort, welcome drink, villa check-in, sunset beach dinner.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <h4>Day 2 — Ocean Adventures</h4>
+                            <p>Morning snorkeling at coral reef, afternoon island hopping tour, evening fine dining experience.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <h4>Day 3 — Relaxation & Discovery</h4>
+                            <p>Sunrise yoga, couples spa session, glass-bottom boat tour, underwater restaurant dinner.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <h4>Day 4 — Adventure Day</h4>
+                            <p>Scuba diving excursion, dolphin cruise, sandbank picnic, farewell gala dinner.</p>
+                        </div>
+                        <div class="itinerary-day">
+                            <h4>Day 5 — Departure</h4>
+                            <p>Breakfast, photo session, speedboat transfer, departure from Malé.</p>
+                        </div>
+                    </div>
+
+                    <div class="tour-reviews">
+                        <h2>Traveler Reviews</h2>
+                        <div class="review-item">
+                            <div class="review-top">
+                                <span class="review-author">Fatima & Ali</span>
+                                <span class="review-date">Feb 2025</span>
+                            </div>
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-body">Absolutely magical experience! The overwater villa was stunning and the service was impeccable. Waywardly handled everything perfectly. Best honeymoon ever!</p>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-top">
+                                <span class="review-author">Zain Ahmed</span>
+                                <span class="review-date">Jan 2025</span>
+                            </div>
+                            <div class="review-stars">★★★★★</div>
+                            <p class="review-body">Worth every rupee! The underwater dining experience was surreal. The team arranged everything seamlessly from Islamabad. Highly recommend for anyone looking for a luxury escape.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-sidebar">
+                    <div class="booking-card">
+                        <div class="booking-price">PKR 185,000 <span>/person</span></div>
+                        <div class="booking-original">PKR 220,000</div>
+                        <form class="booking-form" onsubmit="event.preventDefault(); alert('Booking submitted! We will contact you shortly.');">
+                            <label>Travel Date</label>
+                            <input type="date">
+                            <label>Guests</label>
+                            <select>
+                                <option>1 Person</option>
+                                <option selected>2 Persons</option>
+                                <option>3 Persons</option>
+                                <option>4 Persons</option>
+                            </select>
+                            <label>Departure City</label>
+                            <select>
+                                <option>Karachi</option>
+                                <option>Lahore</option>
+                                <option>Islamabad</option>
+                            </select>
+                            <div class="booking-total">
+                                <span>Total (2 persons)</span>
+                                <span>PKR 370,000</span>
+                            </div>
+                            <button type="submit" class="btn-book">Book Now →</button>
+                        </form>
+                        <p class="booking-note">🛡️ Free cancellation up to 7 days before departure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="section-container"><p>© 2025 Waywardly. Explore. Dream. Discover.</p></div>
+    </footer>
+</body>
+</html>
